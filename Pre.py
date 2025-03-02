@@ -5,7 +5,7 @@ import PIL
 import matplotlib.pyplot as plt
 
 # Ensure matplotlib is in interactive mode for Kaggle
-%matplotlib inline  
+#% matplotlib inline  
 
 def load_and_display_images(gt_folder, img_folder):
     gt_files = sorted(os.listdir(gt_folder))
