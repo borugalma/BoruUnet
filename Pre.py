@@ -1,6 +1,7 @@
 import os
 import cv2
 import numpy as np
+import PIL
 import matplotlib.pyplot as plt
 
 def load_and_display_images(gt_folder, img_folder):
