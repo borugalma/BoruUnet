@@ -85,6 +85,9 @@ def load_and_display_images(gt_folder, img_folder, index):
     img_image_pil = Image.fromarray(cv2.cvtColor(img_image, cv2.COLOR_BGR2RGB))
     gt_image_pil = Image.fromarray(cv2.cvtColor(gt_image, cv2.COLOR_BGR2RGB))
     
+    # Clear previous plot before displaying new images
+    plt.clf()
+
     # Display images side by side using matplotlib
     plt.figure(figsize=(10,5))  # Adjusting the figure size for better display in Kaggle
     
@@ -110,12 +113,16 @@ img_path = os.path.join("./Images")
 # Create a slider widget to choose the image index
 image_slider = widgets.IntSlider(value=0, min=0, max=50, step=1, description='Image Index:', continuous_update=False)
 
-# Define an interactive display
-interactive_display = widgets.interactive(load_and_display_images, 
-                                          gt_folder=widgets.fixed(gt_path), 
-                                          img_folder=widgets.fixed(img_path), 
-                                          index=image_slider)
+# Create an output widget to display the image
+output = widgets.Output()
 
-# Display the interactive widget
-display(interactive_display)
+# Link the slider widget to the output widget
+def update_image(index):
+    with output:
+        load_and_display_images(gt_path, img_path, index)
 
+# Use interactive to automatically update the output
+widgets.interactive(update_image, index=image_slider)
+
+# Display slider and output together
+display(image_slider, output)
