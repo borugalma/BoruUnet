@@ -25,7 +25,7 @@ def load_and_display_images(gt_folder, img_folder, save_output=False):
         return
 
     for i, (gt_file, img_file) in enumerate(zip(gt_files, img_files)):
-        if i >= 50:  # Limit the number of images displayed
+        if i >= 5:  # Limit the number of displayed images
             break
         
         gt_path = os.path.join(gt_folder, gt_file)
@@ -43,29 +43,27 @@ def load_and_display_images(gt_folder, img_folder, save_output=False):
         gt_image = cv2.resize(gt_image, (img_image.shape[1], img_image.shape[0]))
 
         # Display images
-        plt.figure(figsize=(10, 5))
+        fig, ax = plt.subplots(1, 2, figsize=(10, 5))
 
-        plt.subplot(1, 2, 1)
-        plt.imshow(cv2.cvtColor(img_image, cv2.COLOR_BGR2RGB))  # Convert BGR to RGB
-        plt.axis("off")
-        plt.title(f"Image: {img_file}")
+        ax[0].imshow(cv2.cvtColor(img_image, cv2.COLOR_BGR2RGB))  # Convert BGR to RGB
+        ax[0].axis("off")
+        ax[0].set_title(f"OCT Image: {img_file}")
 
-        plt.subplot(1, 2, 2)
-        plt.imshow(gt_image, cmap="gray")  # Display GT in grayscale
-        plt.axis("off")
-        plt.title(f"GT: {gt_file}")
+        ax[1].imshow(gt_image, cmap="gray")  # Display GT in grayscale
+        ax[1].axis("off")
+        ax[1].set_title(f"Ground Truth: {gt_file}")
 
-        plt.show(block=True)  # 🟢 Ensures proper rendering in Kaggle
-        
+        plt.show(block=True)  # Force display in Kaggle/Colab
+
         # Save output if enabled
         if save_output:
             save_path = f"./output_{i}.png"
             plt.savefig(save_path)
             logger.info(f"✅ Image saved: {save_path}")
 
-# Define paths
-gt_path = os.path.join("./GT")
-img_path = os.path.join("./Images")
+# Define paths (Do not change paths)
+gt_path = "./GT"
+img_path = "./Images"
 
 # Run the function
 load_and_display_images(gt_path, img_path, save_output=False)
