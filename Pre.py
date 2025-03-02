@@ -1,49 +1,46 @@
 import os
 import cv2
 import numpy as np
-import PIL
 import matplotlib.pyplot as plt
-# Ensure matplotlib is in interactive mode for Kaggle
-#% matplotlib inline  
 
 def load_and_display_images(gt_folder, img_folder):
     gt_files = sorted(os.listdir(gt_folder))
     img_files = sorted(os.listdir(img_folder))
-
-    num_images = min(len(gt_files), len(img_files), 5)  # Display up to 5 images
-
-    # Create subplots for displaying images
-    fig, axes = plt.subplots(num_images, 2, figsize=(10, num_images * 3))
-
-    if num_images == 1:
-        axes = np.array([[axes[0], axes[1]]])  # Ensure correct indexing for single image
-
-    for i in range(num_images):
-        gt_path = os.path.join(gt_folder, gt_files[i])
-        img_path = os.path.join(img_folder, img_files[i])
-
-        # Load images using PIL to avoid OpenCV display issues
-        gt_image = np.array(PIL.Image.open(gt_path).convert("L"))  # Convert GT to grayscale
-        img_image = np.array(PIL.Image.open(img_path).convert("RGB"))  # Convert normal image to RGB
-
-        # Display the images
-        axes[i, 0].imshow(img_image)
-        axes[i, 0].axis('off')
-        axes[i, 0].set_title(f"Image: {img_files[i]}")
-
-        axes[i, 1].imshow(gt_image, cmap='gray')
-        axes[i, 1].axis('off')
-        axes[i, 1].set_title(f"GT: {gt_files[i]}")
-
-    plt.tight_layout()
-    plt.show(block=True)  # Ensure images display in Kaggle
+    
+    for i, (gt_file, img_file) in enumerate(zip(gt_files, img_files)):
+        if i >= 50:
+            break
+        gt_path = os.path.join(gt_folder, gt_file)
+        img_path = os.path.join(img_folder, img_file)
+        
+        gt_image = cv2.imread(gt_path)
+        img_image = cv2.imread(img_path)
+        
+        if gt_image is None or img_image is None:
+            print(f"Error loading {gt_file} or {img_file}")
+            continue
+        
+        # Resize images to the same size
+        gt_image = cv2.resize(gt_image, (img_image.shape[1], img_image.shape[0]))
+        
+        # Display images side by side
+        plt.figure(figsize=(10,5))
+        
+        plt.subplot(1, 2, 1)
+        plt.imshow(cv2.cvtColor(img_image, cv2.COLOR_BGR2RGB))
+        plt.axis('off')
+        plt.title(f"Image: {img_file}")
+        
+        plt.subplot(1, 2, 2)
+        plt.imshow(cv2.cvtColor(gt_image, cv2.COLOR_BGR2RGB))
+        plt.axis('off')
+        plt.title(f"GT: {gt_file}")
+        
+        plt.show()
 
 # Define paths
-gt_path = "./GT"
-img_path = "./Images"
+gt_path = os.path.join("./GT")
+img_path = os.path.join("./Images")
 
-# Run the function if directories exist and are not empty
-if os.path.exists(gt_path) and os.path.exists(img_path) and os.listdir(gt_path) and os.listdir(img_path):
-    load_and_display_images(gt_path, img_path)
-else:
-    print("Error: GT or Images directories are missing or empty.")
+# Run the function
+load_and_display_images(gt_path, img_path)
