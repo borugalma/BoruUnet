@@ -91,8 +91,10 @@ def load_and_display_images(gt_folder, img_folder):
         plt.show()
 
 # Define paths
-gt_path = "./GT"  # Update with your folder path
-img_path = "./Images"  # Update with your folder path
+# gt_path = "./GT"  # Update with your folder path
+# img_path = "./Images"  # Update with your folder path
+gt_path = "/kaggle/working/BoruUnet/GT"  # Update with your folder path
+img_path = "/kaggle/working/BoruUnet/Images"  # Update with your folder path/kaggle/working/your-repository/
 
 # Run the function
 load_and_display_images(gt_path, img_path)
