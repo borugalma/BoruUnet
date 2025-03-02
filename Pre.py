@@ -1,11 +1,11 @@
-
-import matplotlib
-matplotlib.use("Agg")  # Use a backend that allows forced display
-import matplotlib.pyplot as plt
+# ✅ Force inline mode for Jupyter/Kaggle
+%matplotlib inline  
 
 import os
 import cv2
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")  # ✅ Ensures proper rendering
 import matplotlib.pyplot as plt
 
 def load_and_display_images(gt_folder, img_folder):
@@ -16,16 +16,15 @@ def load_and_display_images(gt_folder, img_folder):
 
     fig, axes = plt.subplots(num_images, 2, figsize=(10, num_images * 3))
 
-    # ✅ Convert to 2D array if only 1 image to display
     if num_images == 1:
-        axes = np.expand_dims(axes, axis=0)  # Makes it a (1, 2) shape array
+        axes = np.expand_dims(axes, axis=0)  # ✅ Ensures 2D array shape
 
     for i in range(num_images):
         gt_path = os.path.join(gt_folder, gt_files[i])
         img_path = os.path.join(img_folder, img_files[i])
 
         gt_image = cv2.imread(gt_path, cv2.IMREAD_GRAYSCALE)  # Load GT as grayscale
-        img_image = cv2.imread(img_path)  # Load OCT image
+        img_image = cv2.imread(img_path)  # Load normal image
 
         if gt_image is None or img_image is None:
             print(f"Error loading {gt_files[i]} or {img_files[i]}")
@@ -43,7 +42,13 @@ def load_and_display_images(gt_folder, img_folder):
         axes[i, 1].set_title(f"GT: {gt_files[i]}")
 
     plt.tight_layout()
-    plt.show(block=True)  # ✅ Forces images to display in Kaggle
+    plt.savefig("output.png")  # ✅ Save the figure as an image file
+
+    # ✅ Use OpenCV to display the saved figure (Fix for Kaggle)
+    img = cv2.imread("output.png")
+    cv2.imshow("Output", img)
+    cv2.waitKey(0)  # Keep the image window open
+    cv2.destroyAllWindows()
 
 # Define paths
 gt_path = "./GT"
