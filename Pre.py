@@ -1,3 +1,8 @@
+
+import matplotlib
+matplotlib.use("Agg")  # Use a backend that allows forced display
+import matplotlib.pyplot as plt
+
 import os
 import cv2
 import numpy as np
