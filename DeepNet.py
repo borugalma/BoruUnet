@@ -7,7 +7,7 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader, Subset
 from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
 from sklearn.model_selection import KFold
-##########
+
 
 # Custom Dataset Class
 class CustomDataset(Dataset):
