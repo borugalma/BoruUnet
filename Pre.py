@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from IPython.display import display  # Ensures images render in Kaggle
 from loguru import logger
 import sys
 
@@ -10,8 +11,8 @@ logger.remove()
 logger.add("logs.txt", format="{time} | {level} | {message}", level="DEBUG")
 logger.add(sys.stdout, format="{time} | {level} | {message}", level="DEBUG")
 
-def load_and_display_images(gt_folder, img_folder, save_output=False):
-    """Load and display images with their corresponding ground truth masks."""
+def load_and_display_images(gt_folder, img_folder):
+    """Load and display OCT images with their corresponding ground truth masks."""
     
     if not os.path.exists(gt_folder) or not os.path.exists(img_folder):
         logger.error("❌ GT or Image folder does not exist!")
@@ -33,10 +34,10 @@ def load_and_display_images(gt_folder, img_folder, save_output=False):
         
         # Load images
         gt_image = cv2.imread(gt_path, cv2.IMREAD_GRAYSCALE)  # Load GT as grayscale
-        img_image = cv2.imread(img_path, cv2.IMREAD_COLOR)    # Load image in BGR format
+        img_image = cv2.imread(img_path, cv2.IMREAD_COLOR)    # Load OCT image
 
         if gt_image is None or img_image is None:
-            logger.error(f"❌ Error loading {gt_file} or {img_file}")
+            logger.error(f"❌ Error loading {gt_path} or {img_path}")
             continue
         
         # Resize GT to match the image dimensions
@@ -53,17 +54,14 @@ def load_and_display_images(gt_folder, img_folder, save_output=False):
         ax[1].axis("off")
         ax[1].set_title(f"Ground Truth: {gt_file}")
 
-        plt.show(block=True)  # Force display in Kaggle/Colab
-
-        # Save output if enabled
-        if save_output:
-            save_path = f"./output_{i}.png"
-            plt.savefig(save_path)
-            logger.info(f"✅ Image saved: {save_path}")
+        plt.show()
+        display(fig)  # Force render in Kaggle
+        plt.close(fig)  # Free up memory
 
 # Define paths (Do not change paths)
 gt_path = "./GT"
 img_path = "./Images"
 
 # Run the function
-load_and_display_images(gt_path, img_path, save_output=False)
+load_and_display_images(gt_path, img_path)
+
