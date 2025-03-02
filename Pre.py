@@ -51,11 +51,9 @@
 
 import os
 import cv2
-import numpy as np
 from PIL import Image
-import matplotlib.pyplot as plt
 import ipywidgets as widgets
-from IPython.display import display
+from IPython.display import display, Image as IPImage
 
 # Function to load and display images interactively
 def load_and_display_images(gt_folder, img_folder, index):
@@ -85,27 +83,19 @@ def load_and_display_images(gt_folder, img_folder, index):
     img_image_pil = Image.fromarray(cv2.cvtColor(img_image, cv2.COLOR_BGR2RGB))
     gt_image_pil = Image.fromarray(cv2.cvtColor(gt_image, cv2.COLOR_BGR2RGB))
     
-    # Clear previous output before displaying new images
-    plt.clf()
+    # Save the images as temporary files to display
+    img_temp_path = "/tmp/temp_img.png"
+    gt_temp_path = "/tmp/temp_gt.png"
+    img_image_pil.save(img_temp_path)
+    gt_image_pil.save(gt_temp_path)
+    
+    # Display the images using IPython.display.Image
+    display(IPImage(img_temp_path), IPImage(gt_temp_path))
 
-    # Create a plot with a larger size to display images clearly
-    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
-    
-    ax[0].imshow(img_image_pil)
-    ax[0].axis('off')
-    ax[0].set_title(f"Image: {img_file}")
-    
-    ax[1].imshow(gt_image_pil)
-    ax[1].axis('off')
-    ax[1].set_title(f"GT: {gt_file}")
-    
-    # Display the plot properly
-    plt.tight_layout()
-    plt.show()
-
-# Define paths (you can adjust these to the dataset paths in Kaggle)
+# Define paths (adjust these to the dataset paths in Kaggle)
 # gt_path = '/kaggle/input/your-dataset/GT'  # Adjust this path according to your dataset on Kaggle
 # img_path = '/kaggle/input/your-dataset/Images'  # Adjust this path according to your dataset on Kaggle
+
 gt_path = os.path.join("./GT")
 img_path = os.path.join("./Images")
 
@@ -128,4 +118,3 @@ widgets.interactive(update_image, index=image_slider)
 
 # Display slider and output together
 display(image_slider, output)
-
