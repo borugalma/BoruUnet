@@ -96,7 +96,7 @@ def train_and_validate(model, dataset, criterion, optimizer, device, epochs=10):
 # Main execution
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    dataset = CustomDataset.from_folders("./GT", "images")
+    dataset = CustomDataset.from_folders("./GT", "./images")
     model = DeepLabV3Model()
     criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
