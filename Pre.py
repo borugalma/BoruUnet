@@ -1,11 +1,7 @@
 import os
 import cv2
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
-
-# ✅ Ensure correct Matplotlib backend
-matplotlib.use("Agg")  
 
 def load_and_display_images(gt_folder, img_folder):
     gt_files = sorted(os.listdir(gt_folder))
@@ -16,7 +12,7 @@ def load_and_display_images(gt_folder, img_folder):
     fig, axes = plt.subplots(num_images, 2, figsize=(10, num_images * 3))
 
     if num_images == 1:
-        axes = np.expand_dims(axes, axis=0)  # ✅ Ensures correct shape
+        axes = np.expand_dims(axes, axis=0)  # Ensure correct shape for 1 image
 
     for i in range(num_images):
         gt_path = os.path.join(gt_folder, gt_files[i])
@@ -41,13 +37,7 @@ def load_and_display_images(gt_folder, img_folder):
         axes[i, 1].set_title(f"GT: {gt_files[i]}")
 
     plt.tight_layout()
-    plt.savefig("output.png")  # ✅ Save the figure as an image
-
-    # ✅ Kaggle Workaround: Read & Display the saved image
-    img = cv2.imread("output.png")
-    cv2.imshow("Output", img)
-    cv2.waitKey(0)  # Keep the window open
-    cv2.destroyAllWindows()
+    plt.show()  # ✅ Displays images correctly in Kaggle
 
 # Define paths
 gt_path = "./GT"
