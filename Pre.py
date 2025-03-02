@@ -2,6 +2,14 @@ import os
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import loguru import logger
+import sys
+
+#configure loagger
+logger.remove()
+logger.add ("logs.txt", format="{time} | {level} | {message}", level = "DEBUG")
+
+logger.add (sys.stdout, format="{time} | {level} | {message}", level = "DEBUG")
 
 def load_and_display_images(gt_folder, img_folder):
     gt_files = sorted(os.listdir(gt_folder))
