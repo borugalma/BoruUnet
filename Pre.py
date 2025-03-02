@@ -3,7 +3,6 @@ import cv2
 import numpy as np
 import PIL
 import matplotlib.pyplot as plt
-
 # Ensure matplotlib is in interactive mode for Kaggle
 #% matplotlib inline  
 
