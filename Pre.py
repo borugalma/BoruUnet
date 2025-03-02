@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-import loguru import logger
+from loguru import logger
 import sys
 
 #configure loagger
