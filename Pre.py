@@ -85,23 +85,22 @@ def load_and_display_images(gt_folder, img_folder, index):
     img_image_pil = Image.fromarray(cv2.cvtColor(img_image, cv2.COLOR_BGR2RGB))
     gt_image_pil = Image.fromarray(cv2.cvtColor(gt_image, cv2.COLOR_BGR2RGB))
     
-    # Clear previous plot before displaying new images
+    # Clear previous output before displaying new images
     plt.clf()
 
-    # Display images side by side using matplotlib
-    plt.figure(figsize=(10,5))  # Adjusting the figure size for better display in Kaggle
+    # Create a plot with a larger size to display images clearly
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
     
-    plt.subplot(1, 2, 1)
-    plt.imshow(img_image_pil)
-    plt.axis('off')
-    plt.title(f"Image: {img_file}")
+    ax[0].imshow(img_image_pil)
+    ax[0].axis('off')
+    ax[0].set_title(f"Image: {img_file}")
     
-    plt.subplot(1, 2, 2)
-    plt.imshow(gt_image_pil)
-    plt.axis('off')
-    plt.title(f"GT: {gt_file}")
+    ax[1].imshow(gt_image_pil)
+    ax[1].axis('off')
+    ax[1].set_title(f"GT: {gt_file}")
     
-    plt.tight_layout()  # Helps to adjust layout and prevent image cutoffs
+    # Display the plot properly
+    plt.tight_layout()
     plt.show()
 
 # Define paths (you can adjust these to the dataset paths in Kaggle)
@@ -119,6 +118,9 @@ output = widgets.Output()
 # Link the slider widget to the output widget
 def update_image(index):
     with output:
+        # Clear previous output (necessary for displaying new image)
+        output.clear_output(wait=True)
+        # Call the function to load and display the images
         load_and_display_images(gt_path, img_path, index)
 
 # Use interactive to automatically update the output
@@ -126,3 +128,4 @@ widgets.interactive(update_image, index=image_slider)
 
 # Display slider and output together
 display(image_slider, output)
+
