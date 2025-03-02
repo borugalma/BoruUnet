@@ -53,7 +53,8 @@ import os
 import cv2
 from PIL import Image
 import ipywidgets as widgets
-from IPython.display import display, Image as IPImage
+from IPython.display import display
+import matplotlib.pyplot as plt
 
 # Function to load and display images interactively
 def load_and_display_images(gt_folder, img_folder, index):
@@ -69,6 +70,7 @@ def load_and_display_images(gt_folder, img_folder, index):
     gt_path = os.path.join(gt_folder, gt_file)
     img_path = os.path.join(img_folder, img_file)
     
+    # Read images using cv2
     gt_image = cv2.imread(gt_path)
     img_image = cv2.imread(img_path)
     
@@ -79,25 +81,32 @@ def load_and_display_images(gt_folder, img_folder, index):
     # Resize images to the same size
     gt_image = cv2.resize(gt_image, (img_image.shape[1], img_image.shape[0]))
     
-    # Convert images to RGB (PIL format)
+    # Convert images to RGB (PIL format) for proper visualization
     img_image_pil = Image.fromarray(cv2.cvtColor(img_image, cv2.COLOR_BGR2RGB))
     gt_image_pil = Image.fromarray(cv2.cvtColor(gt_image, cv2.COLOR_BGR2RGB))
-    
-    # Save the images as temporary files to display
-    img_temp_path = "/tmp/temp_img.png"
-    gt_temp_path = "/tmp/temp_gt.png"
-    img_image_pil.save(img_temp_path)
-    gt_image_pil.save(gt_temp_path)
-    
-    # Display the images using IPython.display.Image
-    display(IPImage(img_temp_path), IPImage(gt_temp_path))
+
+    # Create a figure to plot the images
+    plt.figure(figsize=(10, 5))
+
+    # Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.imshow(img_image_pil)
+    plt.axis('off')
+    plt.title(f"Image: {img_file}")
+
+    # Plot the ground truth image
+    plt.subplot(1, 2, 2)
+    plt.imshow(gt_image_pil)
+    plt.axis('off')
+    plt.title(f"GT: {gt_file}")
+
+    # Show the plot
+    plt.tight_layout()
+    plt.show()
 
 # Define paths (adjust these to the dataset paths in Kaggle)
-# gt_path = '/kaggle/input/your-dataset/GT'  # Adjust this path according to your dataset on Kaggle
-# img_path = '/kaggle/input/your-dataset/Images'  # Adjust this path according to your dataset on Kaggle
-
-gt_path = os.path.join("./GT")
-img_path = os.path.join("./Images")
+gt_path = os.path.join("./GT")  # Adjust path as needed
+img_path = os.path.join("./Images")  # Adjust path as needed
 
 # Create a slider widget to choose the image index
 image_slider = widgets.IntSlider(value=0, min=0, max=50, step=1, description='Image Index:', continuous_update=False)
